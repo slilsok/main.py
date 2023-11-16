@@ -425,7 +425,7 @@ class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Create actions
+        # Create пенис
         exit_action = QAction('Выход', self)
         exit_action.setShortcut('Ctrl+Q')
         exit_action.setStatusTip('Выход из приложения')
