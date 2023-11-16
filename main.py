@@ -15,14 +15,17 @@ from datetime import datetime
 import requests
 import subprocess
 
-def check_for_updates(current_version):
-    # Получение последней версии из репозитория на GitHub
-    repo_url = 'https://api.github.com/repos/slilsok/main.py/releases/latest'
-    response = requests.get(repo_url, verify=False)
-    latest_version = response.json()['tag_name']
+def get_latest_commit_sha(branch_name):
+    repo_url = 'https://api.github.com/repos/ваш_пользователь/ваш_репозиторий/git/refs/heads/' + branch_name
+    response = requests.get(repo_url)
+    latest_commit_sha = response.json()['object']['sha']
+    return latest_commit_sha
 
-    if latest_version > current_version:
-        return latest_version
+def check_for_updates(current_commit_sha, branch_name):
+    latest_commit_sha = get_latest_commit_sha(branch_name)
+
+    if latest_commit_sha != current_commit_sha:
+        return latest_commit_sha
     else:
         return None
 
@@ -425,7 +428,7 @@ class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Create пенис
+        # Create www
         exit_action = QAction('Выход', self)
         exit_action.setShortcut('Ctrl+Q')
         exit_action.setStatusTip('Выход из приложения')
@@ -449,7 +452,7 @@ class MainMenu(QMainWindow):
 
         layout = QVBoxLayout()
 
-        label = QLabel('писюн', help_dialog)
+        label = QLabel('писюнчик', help_dialog)
         layout.addWidget(label)
 
         help_dialog.setLayout(layout)
