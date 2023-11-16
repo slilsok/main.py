@@ -16,8 +16,8 @@ import requests
 import subprocess
 
 def get_latest_commit_sha(branch_name):
-    repo_url = 'https://api.github.com/repos/ваш_пользователь/ваш_репозиторий/git/refs/heads/' + branch_name
-    response = requests.get(repo_url)
+    repo_url = 'https://api.github.com/repos/slilsok/main.py/git/refs/heads/' + branch_name
+    response = requests.get(repo_url, verify=False)
     latest_commit_sha = response.json()['object']['sha']
     return latest_commit_sha
 
@@ -38,12 +38,16 @@ def update_application():
         print(f'Ошибка при обновлении: {e}')
 
 if __name__ == '__main__':
-    current_version = '1.0.0'  # Версия вашего текущего приложения
+    # Замените 'main' на имя вашей ветки
+    branch_name = 'main'
 
-    latest_version = check_for_updates(current_version)
+    # Получение текущего коммита вашей локальной ветки
+    current_commit_sha = 'ваш_текущий_коммит'
 
-    if latest_version:
-        print(f'Доступно обновление ({latest_version})! Хотите обновить приложение? (да/нет)')
+    latest_commit_sha = check_for_updates(current_commit_sha, branch_name)
+
+    if latest_commit_sha:
+        print(f'Доступно обновление (новый коммит {latest_commit_sha})! Хотите обновить приложение? (да/нет)')
         response = input()
         if response.lower() == 'да':
             update_application()
@@ -452,7 +456,7 @@ class MainMenu(QMainWindow):
 
         layout = QVBoxLayout()
 
-        label = QLabel('писюнчик', help_dialog)
+        label = QLabel('писка', help_dialog)
         layout.addWidget(label)
 
         help_dialog.setLayout(layout)
