@@ -16,32 +16,37 @@ import requests
 import subprocess
 
 def get_latest_commit_sha(branch_name):
-    repo_url = 'https://api.github.com/repos/slilsok/main.py/git/refs/heads/' + branch_name
+    repo_url = f'https://api.github.com/repos/slilsok/main.py/git/refs/heads/{branch_name}'
     response = requests.get(repo_url, verify=False)
-    latest_commit_sha = response.json()['object']['sha']
-    return latest_commit_sha
+
+    if response.status_code == 200:
+        latest_commit_sha = response.json()['object']['sha']
+        return latest_commit_sha
+    else:
+        print(f"Ошибка при получении данных: {response.status_code}")
+        return None
 
 def check_for_updates(current_commit_sha, branch_name):
     latest_commit_sha = get_latest_commit_sha(branch_name)
 
-    if latest_commit_sha != current_commit_sha:
+    if latest_commit_sha is not None and latest_commit_sha != current_commit_sha:
         return latest_commit_sha
     else:
         return None
 
 def update_application():
+    # Устанавливаем рабочий каталог для subprocess.run
+    project_directory = r'C:\Users\kozlov\PycharmProjects\LOTO'
+    os.chdir(project_directory)
+
     try:
-        # Скачивание и применение обновлений с использованием Git
-        subprocess.run(['C:\\Program Files\\Git\\bin\\git.exe', 'pull', 'https://github.com/slilsok/main.py', 'main'])
+        subprocess.run(['git', 'pull'])
         print('Обновление выполнено успешно!')
     except subprocess.CalledProcessError as e:
         print(f'Ошибка при обновлении: {e}')
 
 if __name__ == '__main__':
-    # Замените 'main' на имя вашей ветки
     branch_name = 'main'
-
-    # Получение текущего коммита вашей локальной ветки
     current_commit_sha = 'ваш_текущий_коммит'
 
     latest_commit_sha = check_for_updates(current_commit_sha, branch_name)
