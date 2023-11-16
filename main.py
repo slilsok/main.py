@@ -39,15 +39,20 @@ def update_application():
     project_directory = r'C:\Users\kozlov\PycharmProjects\LOTO'
     os.chdir(project_directory)
 
+    # Добавляем путь к Git в PATH (закомментируйте строку, если Git уже находится в PATH)
+    os.environ['PATH'] += os.pathsep + r'C:\C:\Program Files\Git\bin'
+
     try:
-        subprocess.run(['git', 'pull'])
+        # Добавляем capture_output=True и check=True для более надежной обработки ошибок
+        result = subprocess.run(['git', 'pull'], capture_output=True, check=True)
+        print(result.stdout.decode())
         print('Обновление выполнено успешно!')
     except subprocess.CalledProcessError as e:
         print(f'Ошибка при обновлении: {e}')
 
 if __name__ == '__main__':
     branch_name = 'main'
-    current_commit_sha = 'ваш_текущий_коммит'
+    current_commit_sha = '6933b504e68952d8bc8b9cea4518957f1b68b8461'
 
     latest_commit_sha = check_for_updates(current_commit_sha, branch_name)
 
@@ -461,7 +466,7 @@ class MainMenu(QMainWindow):
 
         layout = QVBoxLayout()
 
-        label = QLabel('писка', help_dialog)
+        label = QLabel('хуй', help_dialog)
         layout.addWidget(label)
 
         help_dialog.setLayout(layout)
