@@ -1,4 +1,5 @@
 import sys
+import aiohttp
 import os
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QFileDialog, QStyle, \
     QTextEdit, QGridLayout, QMenu, QAction, QMainWindow, QMenuBar, QMessageBox, QDialog, QInputDialog
@@ -11,6 +12,43 @@ import csv
 from docx import Document
 import getpass
 from datetime import datetime
+import requests
+import subprocess
+
+def check_for_updates(current_version):
+    # Получение последней версии из репозитория на GitHub
+    repo_url = 'https://api.github.com/repos/slilsok/work/releases/latest'
+    response = requests.get(repo_url, verify=False)
+    latest_version = response.json()['tag_name']
+
+    if latest_version > current_version:
+        return latest_version
+    else:
+        return None
+
+def update_application():
+    try:
+        # Скачивание и применение обновлений с использованием Git
+        subprocess.run(['C:\\Program Files\\Git\\bin\\git.exe', 'pull', 'origin', 'master'])
+        print('Обновление выполнено успешно!')
+    except subprocess.CalledProcessError as e:
+        print(f'Ошибка при обновлении: {e}')
+
+if __name__ == '__main__':
+    current_version = '1.0.0'  # Версия вашего текущего приложения
+
+    latest_version = check_for_updates(current_version)
+
+    if latest_version:
+        print(f'Доступно обновление ({latest_version})! Хотите обновить приложение? (да/нет)')
+        response = input()
+        if response.lower() == 'да':
+            update_application()
+            print('Приложение обновлено!')
+        else:
+            print('Обновление отменено.')
+    else:
+        print('У вас установлена последняя версия приложения.')
 
 class WorkerThread(QThread):
     finished = pyqtSignal(str)
@@ -411,7 +449,7 @@ class MainMenu(QMainWindow):
 
         layout = QVBoxLayout()
 
-        label = QLabel('Привет', help_dialog)
+        label = QLabel('пока', help_dialog)
         layout.addWidget(label)
 
         help_dialog.setLayout(layout)
