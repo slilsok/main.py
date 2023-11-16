@@ -17,7 +17,7 @@ import subprocess
 
 def check_for_updates(current_version):
     # Получение последней версии из репозитория на GitHub
-    repo_url = 'https://api.github.com/repos/slilsok/work/releases/latest'
+    repo_url = 'https://api.github.com/repos/slilsok/main.py/releases/latest'
     response = requests.get(repo_url, verify=False)
     latest_version = response.json()['tag_name']
 
@@ -29,7 +29,7 @@ def check_for_updates(current_version):
 def update_application():
     try:
         # Скачивание и применение обновлений с использованием Git
-        subprocess.run(['C:\\Program Files\\Git\\bin\\git.exe', 'pull', 'origin', 'master'])
+        subprocess.run(['C:\\Program Files\\Git\\bin\\git.exe', 'pull', 'https://github.com/slilsok/main.py', 'main'])
         print('Обновление выполнено успешно!')
     except subprocess.CalledProcessError as e:
         print(f'Ошибка при обновлении: {e}')
@@ -449,7 +449,7 @@ class MainMenu(QMainWindow):
 
         layout = QVBoxLayout()
 
-        label = QLabel('пока', help_dialog)
+        label = QLabel('писюн', help_dialog)
         layout.addWidget(label)
 
         help_dialog.setLayout(layout)
